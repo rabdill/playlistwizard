@@ -1,6 +1,8 @@
 package main
 
 import "gopkg.in/gin-gonic/gin.v1"
+import "github.com/rabdill/playlister/spotify"
+import "fmt"
 
 func main() {
   // Creates a gin router with default middleware:
@@ -16,5 +18,11 @@ func main() {
 }
 
 func cool(c *gin.Context) {
-  c.JSON(200, map[string]string{})
+  resp, err := spotify.ArtistSearch("metallica")
+  if err != nil {
+    fmt.Println(err)
+    c.JSON(500, err)
+  } else {
+    c.JSON(200, resp)
+  }
 }
