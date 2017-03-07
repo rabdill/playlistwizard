@@ -33,8 +33,8 @@ func metallica(c *gin.Context) {
 func recs(c *gin.Context) {
   pieces := spotify.RecommendationSettings{
     Seed_artists: []string{"2ye2Wgw4gimLv2eAKyk1NB"},
-    Acousticness: spotify.SongProperty{Target: 1.0},
-    Instrumentalness: spotify.SongProperty{Min: 0.5},
+    Acousticness: spotify.SongProperty{Target: "1.0"},
+    Instrumentalness: spotify.SongProperty{Min: "0.5"},
   }
 
   resp, err := spotify.GetRecs(pieces)

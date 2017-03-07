@@ -2,7 +2,6 @@ package spotify
 
 import "encoding/json"
 import "net/http"
-import "strconv"
 import "fmt"
 import "bytes"
 
@@ -34,6 +33,7 @@ func GetRecs(input RecommendationSettings) ([]Track, error) {
   if(resp.StatusCode != 200) {
     panic(buf.String())
   }
+  fmt.Println(buf.String())
 
   err = json.Unmarshal(buf.Bytes(), &answer); if(err != nil) {
     return []Track{}, err
@@ -42,126 +42,126 @@ func GetRecs(input RecommendationSettings) ([]Track, error) {
 }
 
 func buildRecQuery(input RecommendationSettings, url string) (string, error) {
-  result := make(map[string]float64) // needs to be float64 to convert to string
+  result := make(map[string]string)
 
   // TODO: made this less stupid
-  if input.Acousticness.Min != 0 {
+  if input.Acousticness.Min != "" {
     result["min_acousticness"] = input.Acousticness.Min
   }
-  if input.Acousticness.Max != 0 {
+  if input.Acousticness.Max != "" {
     result["max_acousticness"] = input.Acousticness.Max
   }
-  if input.Acousticness.Target != 0 {
+  if input.Acousticness.Target != "" {
     result["target_acousticness"] = input.Acousticness.Target
   }
 
-  if input.Danceability.Min != 0 {
+  if input.Danceability.Min != "" {
     result["min_danceability"] = input.Danceability.Min
   }
-  if input.Danceability.Max != 0 {
+  if input.Danceability.Max != "" {
     result["max_danceability"] = input.Danceability.Max
   }
-  if input.Danceability.Target != 0 {
+  if input.Danceability.Target != "" {
     result["target_danceability"] = input.Danceability.Target
   }
 
-  if input.Energy.Min != 0 {
+  if input.Energy.Min != "" {
     result["min_energy"] = input.Energy.Min
   }
-  if input.Energy.Max != 0 {
+  if input.Energy.Max != "" {
     result["max_energy"] = input.Energy.Max
   }
-  if input.Energy.Target != 0 {
+  if input.Energy.Target != "" {
     result["target_energy"] = input.Energy.Target
   }
 
-  if input.Instrumentalness.Min != 0 {
+  if input.Instrumentalness.Min != "" {
     result["min_instrumentalness"] = input.Instrumentalness.Min
   }
-  if input.Instrumentalness.Max != 0 {
+  if input.Instrumentalness.Max != "" {
     result["max_instrumentalness"] = input.Instrumentalness.Max
   }
-  if input.Instrumentalness.Target != 0 {
+  if input.Instrumentalness.Target != "" {
     result["target_instrumentalness"] = input.Instrumentalness.Target
   }
 
-  if input.Liveness.Min != 0 {
+  if input.Liveness.Min != "" {
     result["min_liveness"] = input.Liveness.Min
   }
-  if input.Liveness.Max != 0 {
+  if input.Liveness.Max != "" {
     result["max_liveness"] = input.Liveness.Max
   }
-  if input.Liveness.Target != 0 {
+  if input.Liveness.Target != "" {
     result["target_liveness"] = input.Liveness.Target
   }
 
-  if input.Loudness.Min != 0 {
+  if input.Loudness.Min != "" {
     result["min_loudness"] = input.Loudness.Min
   }
-  if input.Loudness.Max != 0 {
+  if input.Loudness.Max != "" {
     result["max_loudness"] = input.Loudness.Max
   }
-  if input.Loudness.Target != 0 {
+  if input.Loudness.Target != "" {
     result["target_loudness"] = input.Loudness.Target
   }
 
-  if input.Speechiness.Min != 0 {
+  if input.Speechiness.Min != "" {
     result["min_speechiness"] = input.Speechiness.Min
   }
-  if input.Speechiness.Max != 0 {
+  if input.Speechiness.Max != "" {
     result["max_speechiness"] = input.Speechiness.Max
   }
-  if input.Speechiness.Target != 0 {
+  if input.Speechiness.Target != "" {
     result["target_speechiness"] = input.Speechiness.Target
   }
 
-  if input.Tempo.Min != 0 {
+  if input.Tempo.Min != "" {
     result["min_tempo"] = input.Tempo.Min
   }
-  if input.Tempo.Max != 0 {
+  if input.Tempo.Max != "" {
     result["max_tempo"] = input.Tempo.Max
   }
-  if input.Tempo.Target != 0 {
+  if input.Tempo.Target != "" {
     result["target_tempo"] = input.Tempo.Target
   }
 
-  if input.Valence.Min != 0 {
+  if input.Valence.Min != "" {
     result["min_valence"] = input.Valence.Min
   }
-  if input.Valence.Max != 0 {
+  if input.Valence.Max != "" {
     result["max_valence"] = input.Valence.Max
   }
-  if input.Valence.Target != 0 {
+  if input.Valence.Target != "" {
     result["target_valence"] = input.Valence.Target
   }
 
-  if input.Mode.Target != 0 { // NOTE: some only get a target
+  if input.Mode.Target != "" { // NOTE: some only get a target
     result["target_mode"] = input.Mode.Target
   }
-  if input.Key.Target != 0 {
+  if input.Key.Target != "" {
     result["target_key"] = input.Key.Target
   }
-  if input.Time_signature.Target != 0 {
+  if input.Time_signature.Target != "" {
     result["target_time_signature"] = input.Time_signature.Target
   }
 
-  if input.Duration_ms.Min != 0 {
+  if input.Duration_ms.Min != "" {
     result["min_duration_ms"] = input.Duration_ms.Min
   }
-  if input.Duration_ms.Max != 0 {
+  if input.Duration_ms.Max != "" {
     result["max_duration_ms"] = input.Duration_ms.Max
   }
-  if input.Duration_ms.Target != 0 {
+  if input.Duration_ms.Target != "" {
     result["target_duration_ms"] = input.Duration_ms.Target
   }
 
-  if input.Popularity.Min != 0 {
+  if input.Popularity.Min != "" {
     result["min_popularity"] = input.Popularity.Min
   }
-  if input.Popularity.Max != 0 {
+  if input.Popularity.Max != "" {
     result["max_popularity"] = input.Popularity.Max
   }
-  if input.Popularity.Target != 0 {
+  if input.Popularity.Target != "" {
     result["target_popularity"] = input.Popularity.Target
   }
 
@@ -177,7 +177,7 @@ func buildRecQuery(input RecommendationSettings, url string) (string, error) {
 
   query := req.URL.Query()
   for k, v := range result {
-    query.Add(k, strconv.FormatFloat(v, 'f', -1, 32))
+    query.Add(k, v)
   }
   req.URL.RawQuery = query.Encode()
 

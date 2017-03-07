@@ -33,12 +33,12 @@ type RecommendationSettings struct {
 }
 // SongProperty - a range of acceptable values for a given metadata field
 type SongProperty struct {
-  Max, Min, Target float64
+  Max, Min, Target string // TODO: flip these over to floats
 }
 // DiscreteSongProperty - for metadata restrictions that only accept whole numbers
 type DiscreteSongProperty struct {
   //Max, Min, Target int
-  Max, Min, Target float64
+  Max, Min, Target string // TODO: flip these over to ints
 }
 
 // recommendationResponse - top-level response from spotify
@@ -46,6 +46,7 @@ type recommendationResponse struct {
   Tracks []Track
 }
 type Track struct {
-  artists []Artist
+  Artists []Artist `json:"artists"`
+  Name string `json:"name"`
   // more *tk
 }
