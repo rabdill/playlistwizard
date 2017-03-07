@@ -1,149 +1,159 @@
 package spotify
 
 import "encoding/json"
+import "net/http"
+import "strconv"
 
 func GetRecs(input RecommendationSettings) ([]Track, error) {
-  var answer recommendationResponse
-  res, err := httpCall("https://api.spotify.com/v1/recommendations")
-  err = json.Unmarshal(res, &answer)
+  url, err := buildRecQuery(input, "https://api.spotify.com/v1/recommendations")
+  if(err != nil) {
+    return []Track{}, err
+  }
 
+  var answer recommendationResponse
+  res, err := httpCall(url)
+  if(err != nil) {
+    return []Track{}, err
+  }
+  err = json.Unmarshal(res, &answer)
   return answer.Tracks, err
 }
 
 func buildRecQuery(input RecommendationSettings, url string) (string, error) {
+  result := make(map[string]float64) // needs to be float64 to convert to string
 
   // TODO: made this less stupid
-  if input.acousticness.min != 0 {
-    result["min_acousticness"] = input.acousticness.min
+  if input.Acousticness.Min != 0 {
+    result["min_acousticness"] = input.Acousticness.Min
   }
-  if input.acousticness.max != 0 {
-    result["max_acoustic"] = input.acousticness.max
+  if input.Acousticness.Max != 0 {
+    result["max_acousticness"] = input.Acousticness.Max
   }
-  if input.acousticness.target != 0 {
-    result["target_acousticness"] = input.acousticness.target
-  }
-
-  if input.danceability.min != 0 {
-    result["min_danceability"] = input.danceability.min
-  }
-  if input.danceability.max != 0 {
-    result["max_danceability"] = input.danceability.max
-  }
-  if input.danceability.target != 0 {
-    result["target_danceability"] = input.danceability.target
+  if input.Acousticness.Target != 0 {
+    result["target_acousticness"] = input.Acousticness.Target
   }
 
-  if input.energy.min != 0 {
-    result["min_energy"] = input.energy.min
+  if input.Danceability.Min != 0 {
+    result["min_danceability"] = input.Danceability.Min
   }
-  if input.energy.max != 0 {
-    result["max_energy"] = input.energy.max
+  if input.Danceability.Max != 0 {
+    result["max_danceability"] = input.Danceability.Max
   }
-  if input.energy.target != 0 {
-    result["target_energy"] = input.energy.target
-  }
-
-  if input.instrumentalness.min != 0 {
-    result["min_instrumentalness"] = input.instrumentalness.min
-  }
-  if input.instrumentalness.max != 0 {
-    result["max_instrumentalness"] = input.instrumentalness.max
-  }
-  if input.instrumentalness.target != 0 {
-    result["target_instrumentalness"] = input.instrumentalness.target
+  if input.Danceability.Target != 0 {
+    result["target_danceability"] = input.Danceability.Target
   }
 
-  if input.liveness.min != 0 {
-    result["min_liveness"] = input.liveness.min
+  if input.Energy.Min != 0 {
+    result["min_energy"] = input.Energy.Min
   }
-  if input.liveness.max != 0 {
-    result["max_liveness"] = input.liveness.max
+  if input.Energy.Max != 0 {
+    result["max_energy"] = input.Energy.Max
   }
-  if input.liveness.target != 0 {
-    result["target_liveness"] = input.liveness.target
-  }
-
-  if input.loudness.min != 0 {
-    result["min_loudness"] = input.loudness.min
-  }
-  if input.loudness.max != 0 {
-    result["max_loudness"] = input.loudness.max
-  }
-  if input.loudness.target != 0 {
-    result["target_loudness"] = input.loudness.target
+  if input.Energy.Target != 0 {
+    result["target_energy"] = input.Energy.Target
   }
 
-  if input.speechiness.min != 0 {
-    result["min_speechiness"] = input.speechiness.min
+  if input.Instrumentalness.Min != 0 {
+    result["min_instrumentalness"] = input.Instrumentalness.Min
   }
-  if input.speechiness.max != 0 {
-    result["max_speechiness"] = input.speechiness.max
+  if input.Instrumentalness.Max != 0 {
+    result["max_instrumentalness"] = input.Instrumentalness.Max
   }
-  if input.speechiness.target != 0 {
-    result["target_speechiness"] = input.speechiness.target
-  }
-
-  if input.tempo.min != 0 {
-    result["min_tempo"] = input.tempo.min
-  }
-  if input.tempo.max != 0 {
-    result["max_tempo"] = input.tempo.max
-  }
-  if input.tempo.target != 0 {
-    result["target_tempo"] = input.tempo.target
+  if input.Instrumentalness.Target != 0 {
+    result["target_instrumentalness"] = input.Instrumentalness.Target
   }
 
-  if input.valence.min != 0 {
-    result["min_valence"] = input.valence.min
+  if input.Liveness.Min != 0 {
+    result["min_liveness"] = input.Liveness.Min
   }
-  if input.valence.max != 0 {
-    result["max_valence"] = input.valence.max
+  if input.Liveness.Max != 0 {
+    result["max_liveness"] = input.Liveness.Max
   }
-  if input.valence.target != 0 {
-    result["target_valence"] = input.valence.target
-  }
-
-  if input.mode.target != 0 { // NOTE: some only get a target
-    result["target_mode"] = input.mode.target
-  }
-  if input.key.target != 0 {
-    result["target_key"] = input.key.target
-  }
-  if input.time_signature.target != 0 {
-    result["target_time_signature"] = input.time_signature.target
+  if input.Liveness.Target != 0 {
+    result["target_liveness"] = input.Liveness.Target
   }
 
-  if input.duration_ms.min != 0 {
-    result["min_duration_ms"] = input.duration_ms.min
+  if input.Loudness.Min != 0 {
+    result["min_loudness"] = input.Loudness.Min
   }
-  if input.duration_ms.max != 0 {
-    result["max_duration_ms"] = input.duration_ms.max
+  if input.Loudness.Max != 0 {
+    result["max_loudness"] = input.Loudness.Max
   }
-  if input.duration_ms.target != 0 {
-    result["target_duration_ms"] = input.duration_ms.target
-  }
-
-  if input.popularity.min != 0 {
-    result["min_popularity"] = input.popularity.min
-  }
-  if input.popularity.max != 0 {
-    result["max_popularity"] = input.popularity.max
-  }
-  if input.popularity.target != 0 {
-    result["target_popularity"] = input.popularity.target
+  if input.Loudness.Target != 0 {
+    result["target_loudness"] = input.Loudness.Target
   }
 
-  // build the actual URL
+  if input.Speechiness.Min != 0 {
+    result["min_speechiness"] = input.Speechiness.Min
+  }
+  if input.Speechiness.Max != 0 {
+    result["max_speechiness"] = input.Speechiness.Max
+  }
+  if input.Speechiness.Target != 0 {
+    result["target_speechiness"] = input.Speechiness.Target
+  }
+
+  if input.Tempo.Min != 0 {
+    result["min_tempo"] = input.Tempo.Min
+  }
+  if input.Tempo.Max != 0 {
+    result["max_tempo"] = input.Tempo.Max
+  }
+  if input.Tempo.Target != 0 {
+    result["target_tempo"] = input.Tempo.Target
+  }
+
+  if input.Valence.Min != 0 {
+    result["min_valence"] = input.Valence.Min
+  }
+  if input.Valence.Max != 0 {
+    result["max_valence"] = input.Valence.Max
+  }
+  if input.Valence.Target != 0 {
+    result["target_valence"] = input.Valence.Target
+  }
+
+  if input.Mode.Target != 0 { // NOTE: some only get a target
+    result["target_mode"] = input.Mode.Target
+  }
+  if input.Key.Target != 0 {
+    result["target_key"] = input.Key.Target
+  }
+  if input.Time_signature.Target != 0 {
+    result["target_time_signature"] = input.Time_signature.Target
+  }
+
+  if input.Duration_ms.Min != 0 {
+    result["min_duration_ms"] = input.Duration_ms.Min
+  }
+  if input.Duration_ms.Max != 0 {
+    result["max_duration_ms"] = input.Duration_ms.Max
+  }
+  if input.Duration_ms.Target != 0 {
+    result["target_duration_ms"] = input.Duration_ms.Target
+  }
+
+  if input.Popularity.Min != 0 {
+    result["min_popularity"] = input.Popularity.Min
+  }
+  if input.Popularity.Max != 0 {
+    result["max_popularity"] = input.Popularity.Max
+  }
+  if input.Popularity.Target != 0 {
+    result["target_popularity"] = input.Popularity.Target
+  }
+
+  // build the actual URL (this request is NEVER SENT)
   req, err := http.NewRequest("GET", url, nil)
   if err != nil {
     return "", err
   }
 
-  q := req.URL.Query()
-  for k, v := range m {
-    q.Add(k, v)
+  query := req.URL.Query()
+  for k, v := range result {
+    query.Add(k, strconv.FormatFloat(v, 'f', -1, 32))
   }
-  req.URL.RawQuery = q.Encode()
+  req.URL.RawQuery = query.Encode()
 
   return req.URL.String(), err
 }

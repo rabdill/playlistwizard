@@ -24,19 +24,20 @@ type artistWrapper struct {
 
 // RecommendationQuery - collecting user parameters to rearrange and send to Spotify
 type RecommendationSettings struct {
-  limit int // default 20 max 100
+  Limit int // default 20 max 100
   //market string // figure out if we need this later
-  acousticness, danceability, energy, instrumentalness, liveness, loudness, speechiness, tempo, valence SongProperty
-  mode DiscreteSongProperty // 1=major, 0=minor
-  duration_ms, key, popularity, time_signature DiscreteSongProperty
+  Acousticness, Danceability, Energy, Instrumentalness, Liveness, Loudness, Speechiness, Tempo, Valence SongProperty
+  Mode DiscreteSongProperty // 1=major, 0=minor
+  Duration_ms, Key, Popularity, Time_signature DiscreteSongProperty
 }
 // SongProperty - a range of acceptable values for a given metadata field
 type SongProperty struct {
-  max, min, target float32
+  Max, Min, Target float64
 }
 // DiscreteSongProperty - for metadata restrictions that only accept whole numbers
 type DiscreteSongProperty struct {
-  max, min, target int
+  //Max, Min, Target int
+  Max, Min, Target float64
 }
 
 // recommendationResponse - top-level response from spotify

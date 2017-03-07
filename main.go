@@ -9,7 +9,8 @@ func main() {
   // logger and recovery (crash-free) middleware
   router := gin.Default()
 
-  router.GET("/", cool)
+  router.GET("/metallica", metallica)
+  router.GET("/recs", recs)
 
   // By default it serves on :8080 unless a
   // PORT environment variable was defined.
@@ -17,11 +18,25 @@ func main() {
   // router.Run(":3000") for a hard coded port
 }
 
-func cool(c *gin.Context) {
+func metallica(c *gin.Context) {
   resp, err := spotify.ArtistSearch("metallica")
   if err != nil {
     fmt.Println(err)
     c.JSON(500, err)
+  } else {
+    c.JSON(200, resp)
+  }
+}
+
+func recs(c *gin.Context) {
+  pieces := spotify.RecommendationSettings{
+    Acousticness: spotify.SongProperty{Target: 1.0},
+    Instrumentalness: spotify.SongProperty{Min: 0.5},
+  }
+
+  resp, err := spotify.GetRecs(pieces)
+  if err != nil {
+    c.JSON(500, err.Error())
   } else {
     c.JSON(200, resp)
   }
