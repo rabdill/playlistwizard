@@ -9,6 +9,8 @@ func main() {
   // logger and recovery (crash-free) middleware
   router := gin.Default()
 
+  spotify.Token = spotify.GetToken()
+
   router.GET("/metallica", metallica)
   router.GET("/recs", recs)
 
@@ -30,6 +32,7 @@ func metallica(c *gin.Context) {
 
 func recs(c *gin.Context) {
   pieces := spotify.RecommendationSettings{
+    Seed_artists: []string{"2ye2Wgw4gimLv2eAKyk1NB"},
     Acousticness: spotify.SongProperty{Target: 1.0},
     Instrumentalness: spotify.SongProperty{Min: 0.5},
   }

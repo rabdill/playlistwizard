@@ -3,19 +3,41 @@ package spotify
 import "encoding/json"
 import "net/http"
 import "strconv"
+import "fmt"
+import "bytes"
 
 func GetRecs(input RecommendationSettings) ([]Track, error) {
   url, err := buildRecQuery(input, "https://api.spotify.com/v1/recommendations")
   if(err != nil) {
     return []Track{}, err
   }
-
   var answer recommendationResponse
-  res, err := httpCall(url)
+  fmt.Println(url)
+  req, err := http.NewRequest("GET", url, nil)
   if(err != nil) {
     return []Track{}, err
   }
-  err = json.Unmarshal(res, &answer)
+  fmt.Printf("TOKEN ISSSS %s", Token)
+  req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", Token))
+  req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+  // do request
+  client := &http.Client{}
+  resp, err := client.Do(req)
+  if err != nil {
+    panic(err)
+  }
+  defer resp.Body.Close()
+
+  buf := new(bytes.Buffer)
+  buf.ReadFrom(resp.Body)
+  if(resp.StatusCode != 200) {
+    panic(buf.String())
+  }
+
+  err = json.Unmarshal(buf.Bytes(), &answer); if(err != nil) {
+    return []Track{}, err
+  }
   return answer.Tracks, err
 }
 
@@ -141,6 +163,10 @@ func buildRecQuery(input RecommendationSettings, url string) (string, error) {
   }
   if input.Popularity.Target != 0 {
     result["target_popularity"] = input.Popularity.Target
+  }
+
+  if len(input.Seed_artists) > 0 {
+    result["seed_artists"] = input.Seed_artists[0] // NOTE THIS ISNT RIGHT AND WILL NOT KEEP MULTIPLE SEEDS
   }
 
   // build the actual URL (this request is NEVER SENT)

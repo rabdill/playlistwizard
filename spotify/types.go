@@ -29,6 +29,7 @@ type RecommendationSettings struct {
   Acousticness, Danceability, Energy, Instrumentalness, Liveness, Loudness, Speechiness, Tempo, Valence SongProperty
   Mode DiscreteSongProperty // 1=major, 0=minor
   Duration_ms, Key, Popularity, Time_signature DiscreteSongProperty
+  Seed_artists []string
 }
 // SongProperty - a range of acceptable values for a given metadata field
 type SongProperty struct {
