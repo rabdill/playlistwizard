@@ -11,7 +11,6 @@ func GetRecs(input RecommendationSettings) ([]Track, error) {
     return []Track{}, err
   }
   var answer recommendationResponse
-  fmt.Println(url)
   req, err := http.NewRequest("GET", url, nil)
   if(err != nil) {
     return []Track{}, err
@@ -32,7 +31,6 @@ func GetRecs(input RecommendationSettings) ([]Track, error) {
   if(resp.StatusCode != 200) {
     panic(buf.String())
   }
-  fmt.Println(buf.String())
 
   err = json.Unmarshal(buf.Bytes(), &answer); if(err != nil) {
     return []Track{}, err

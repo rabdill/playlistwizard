@@ -15,7 +15,6 @@ func main() {
   spotify.Token = spotify.GetToken()
 
   router.GET("/", index)
-  router.GET("/metallica", metallica)
   router.GET("/recs", recs)
   router.GET("/search", search)
 
@@ -29,16 +28,6 @@ func index(c *gin.Context) {
   c.HTML(http.StatusOK, "index.tmpl", gin.H{
     "title": "Main website",
   })
-}
-
-func metallica(c *gin.Context) {
-  resp, err := spotify.ArtistSearch("metallica")
-  if err != nil {
-    fmt.Println(err)
-    c.JSON(500, err)
-  } else {
-    c.JSON(200, resp)
-  }
 }
 
 func recs(c *gin.Context) {

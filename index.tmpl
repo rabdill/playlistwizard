@@ -14,7 +14,7 @@
         <input type="submit"><br>
       </form>
     </div>
-
+    <hr>
     <div id="artistchoices"></div>
 
     <div id="tracks"></div>
@@ -37,6 +37,10 @@ function artistSearch() {
     }
     if(data.length == 0) results = "Sorry, no artists found.";
     $("#artistchoices").html(results);
+  })
+  .fail(function(err) {
+    console.log("SOMETHING BROKE");
+    console.log(err);
   });
 }
 
@@ -55,6 +59,7 @@ function printRecs(data) {
   for(var i=0, rec; rec=data[i]; i++){
       results += "<li>" + rec.artists[0].name + ", \"" + rec.name + "\""
   }
+  if(data.length == 0) results="Sorry, no tracks found.";
   $("#tracks").html(results);
 }
 
