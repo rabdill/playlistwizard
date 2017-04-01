@@ -48,5 +48,6 @@ type recommendationResponse struct {
 type Track struct {
   Artists []Artist `json:"artists"`
   Name string `json:"name"`
-  // more *tk
+  ExternalUrls map[string]string `json:"external_urls"`
+  ID string `json:"id"`
 }

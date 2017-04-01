@@ -15,7 +15,9 @@
       </form>
     </div>
 
-    <div id="results"></div>
+    <div id="artistchoices"></div>
+
+    <div id="tracks"></div>
 
     <script
       src="https://code.jquery.com/jquery-3.2.1.min.js"
@@ -33,8 +35,8 @@ function artistSearch() {
     for(var i=0, band; band=data[i]; i++){
       results += "<button onclick=\"getRecs('" + band.id + "')\">" + band.name + "</button><br>";
     }
-    $("#results").html(results);
-    console.log("DONE!")
+    if(data.length == 0) results = "Sorry, no artists found.";
+    $("#artistchoices").html(results);
   });
 }
 
@@ -43,8 +45,17 @@ function getRecs(id) {
   $.get("/recs", {"artist_id": id})
   .done(function( data ) {
     console.log("AHHHH");
-    console.log(data);
+    printRecs(data);
   });
+}
+
+// display recommendations
+function printRecs(data) {
+  results = "<ul>"
+  for(var i=0, rec; rec=data[i]; i++){
+      results += "<li>" + rec.artists[0].name + ", \"" + rec.name + "\""
+  }
+  $("#tracks").html(results);
 }
 
 
