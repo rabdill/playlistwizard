@@ -11,7 +11,55 @@
     <div>
       <form action="javascript:artistSearch();">
         <input type="text" id="artistsearch"><br>
-        <input type="submit"><br>
+        <input type="submit"><br><br>
+
+        <table>
+
+
+        <tr><td><label for="acousticness">Acousticness</label><td>
+        <input type="range" min="0" max="1" value=".5" step="0.01" id="acousticness" step="1" oninput="outputUpdate('acousticness_value', value)">
+        <output for="acousticness" id="acousticness_value">0.5</output><br>
+
+        <tr><td><label for="danceability">Danceability</label><td>
+        <input type="range" min="0" max="1" value=".5" step="0.01" id="danceability" step="1" oninput="outputUpdate('danceability_value', value)">
+        <output for="danceability" id="danceability_value">0.5</output><br>
+
+        <tr><td><label for="energy">Energy</label><td>
+        <input type="range" min="0" max="1" value=".5" step="0.01" id="energy" step="1" oninput="outputUpdate('energy_value', value)">
+        <output for="energy" id="energy_value">0.5</output><br>
+
+        <tr><td><label for="instrumentalness">Instrumentalness</label><td>
+        <input type="range" min="0" max="1" value=".5" step="0.01" id="instrumentalness" step="1" oninput="outputUpdate('instrumentalness_value', value)">
+        <output for="instrumentalness" id="instrumentalness_value">0.5</output><br>
+
+        <tr><td><label for="liveness">Liveness</label><td>
+        <input type="range" min="0" max="1" value=".5" step="0.01" id="liveness" step="1" oninput="outputUpdate('liveness_value', value)">
+        <output for="liveness" id="liveness_value">0.5</output><br>
+
+        <tr><td><label for="loudness">Loudness</label><td>
+        <input type="range" min="0" max="1" value=".5" step="0.01" id="loudness" step="1" oninput="outputUpdate('loudness_value', value)">
+        <output for="loudness" id="loudness_value">0.5</output><br>
+
+        <tr><td><label for="loudness">Loudness</label><td>
+        <input type="range" min="0" max="1" value=".5" step="0.01" id="loudness" step="1" oninput="outputUpdate('loudness_value', value)">
+        <output for="loudness" id="loudness_value">0.5</output><br>
+
+        <tr><td><label for="mode">Mode</label><td>
+        <input type="radio" name="mode" value="1" checked> Major
+        <input type="radio" name="mode" value="0"> Minor<br>
+
+        <tr><td><label for="popularity">Popularity</label><td>
+        <input type="range" min="0" max="100" value="50" step="1" id="popularity" step="1" oninput="outputUpdate('popularity_value', value)">
+        <output for="popularity" id="popularity_value">50</output><br>
+
+        <tr><td><label for="speechiness">Speechiness</label><td>
+        <input type="range" min="0" max="1" value=".5" step="0.01" id="speechiness" step="1" oninput="outputUpdate('speechiness_value', value)">
+        <output for="speechiness" id="speechiness_value">0.5</output><br>
+
+        <tr><td><label for="valence">Valence</label><td>
+        <input type="range" min="0" max="1" value=".5" step="0.01" id="valence" step="1" oninput="outputUpdate('valence_value', value)">
+        <output for="valence" id="valence_value">0.5</output><br>
+
       </form>
     </div>
     <hr>
@@ -25,6 +73,10 @@
       crossorigin="anonymous"></script>
 
 <script>
+
+function outputUpdate(id, val) {
+	document.querySelector('#' + id).value = val;
+}
 
 // get options for seed artists based on a typed name:
 function artistSearch() {
