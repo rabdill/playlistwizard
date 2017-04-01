@@ -3,7 +3,6 @@ package main
 import "net/http"
 import "gopkg.in/gin-gonic/gin.v1"
 import "github.com/rabdill/playlister/spotify"
-import "fmt"
 
 func main() {
   // Creates a gin router with default middleware:
@@ -34,7 +33,7 @@ func recs(c *gin.Context) {
   seed := c.DefaultQuery("artist_id", "2ye2Wgw4gimLv2eAKyk1NB")
 
   factors := spotify.RecommendationSettings{
-    Seed_artists: []string{seed},
+    Seed_artists: seed,
     Acousticness: spotify.SongProperty{Target: "1.0"},
     Instrumentalness: spotify.SongProperty{Min: "0.5"},
   }

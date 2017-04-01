@@ -163,7 +163,7 @@ func buildRecQuery(input RecommendationSettings, url string) (string, error) {
   }
 
   if len(input.Seed_artists) > 0 {
-    result["seed_artists"] = input.Seed_artists[0] // NOTE THIS ISNT RIGHT AND WILL NOT KEEP MULTIPLE SEEDS
+    result["seed_artists"] = input.Seed_artists
   }
 
   // build the actual URL (this request is NEVER SENT)
