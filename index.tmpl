@@ -8,16 +8,46 @@
   <body>
     <h1>Playlister</h1>
 
+    <div>
+      <form action="javascript:artistSearch();">
+        <input type="text" id="artistsearch"><br>
+        <input type="submit"><br>
+      </form>
+    </div>
+
+    <div id="results"></div>
+
     <script
       src="https://code.jquery.com/jquery-3.2.1.min.js"
       integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
       crossorigin="anonymous"></script>
 
 <script>
-$.get( "http://127.0.0.1:8080/metallica", {} )
-.done(function( data ) {
-  alert( "Data Loaded: " + data );
-});
+
+// get options for seed artists based on a typed name:
+function artistSearch() {
+  //$.get( "/search?artist_name=" + $("#artistsearch").val(), {})
+  $.get( "/search", {"artist_name": $("#artistsearch").val()})
+  .done(function( data ) {
+    results = "";
+    for(var i=0, band; band=data[i]; i++){
+      results += "<button onclick=\"getRecs('" + band.id + "')\">" + band.name + "</button><br>";
+    }
+    $("#results").html(results);
+    console.log("DONE!")
+  });
+}
+
+// send the seed artist, get the recs:
+function getRecs(id) {
+  $.get("/recs", {"artist_id": id})
+  .done(function( data ) {
+    console.log("AHHHH");
+    console.log(data);
+  });
+}
+
+
 </script>
   </body>
 </html>
