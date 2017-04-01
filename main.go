@@ -34,8 +34,41 @@ func recs(c *gin.Context) {
 
   factors := spotify.RecommendationSettings{
     Seed_artists: seed,
-    Acousticness: spotify.SongProperty{Target: "1.0"},
-    Instrumentalness: spotify.SongProperty{Min: "0.5"},
+    // Acousticness: spotify.SongProperty{Target: "1.0"},
+    // Instrumentalness: spotify.SongProperty{Min: "0.5"},
+  }
+  params := c.Request.URL.Query()
+
+  // TODO: use reflection to make this not awful
+  if(len(params["acousticness"]) > 0) {
+    factors.Acousticness = spotify.SongProperty{Target: params["acousticness"][0]}
+  }
+  if(len(params["danceability"]) > 0) {
+    factors.Danceability = spotify.SongProperty{Target: params["danceability"][0]}
+  }
+  if(len(params["energy"]) > 0) {
+    factors.Energy = spotify.SongProperty{Target: params["energy"][0]}
+  }
+  if(len(params["instrumentalness"]) > 0) {
+    factors.Instrumentalness = spotify.SongProperty{Target: params["instrumentalness"][0]}
+  }
+  if(len(params["liveness"]) > 0) {
+    factors.Liveness = spotify.SongProperty{Target: params["liveness"][0]}
+  }
+  if(len(params["loudness"]) > 0) {
+    factors.Loudness = spotify.SongProperty{Target: params["loudness"][0]}
+  }
+  if(len(params["mode"]) > 0) {
+    factors.Mode = spotify.DiscreteSongProperty{Target: params["mode"][0]}
+  }
+  if(len(params["popularity"]) > 0) {
+    factors.Popularity = spotify.DiscreteSongProperty{Target: params["popularity"][0]}
+  }
+  if(len(params["speechiness"]) > 0) {
+    factors.Speechiness = spotify.SongProperty{Target: params["speechiness"][0]}
+  }
+  if(len(params["valence"]) > 0) {
+    factors.Valence = spotify.SongProperty{Target: params["valence"][0]}
   }
 
   resp, err := spotify.GetRecs(factors)

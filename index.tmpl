@@ -25,48 +25,44 @@
     <div>
       <form action="javascript:getRecs();">
         <table>
-          <tr><td><label for="acousticness">Acousticness</label><td>
-          <input type="range" min="0" max="1" value=".5" step="0.01" id="acousticness" step="1" oninput="outputUpdate('acousticness_value', value)">
+          <tr><td><input type="checkbox" id="acousticness_toggle"><label for="acousticness">Acousticness</label><td>
+          <input type="range" min="0" max="1" value=".5" step="0.01" id="acousticness" step="1" oninput="outputUpdate('Acousticness_value', value)">
           <output for="acousticness" id="acousticness_value">0.5</output><br>
 
-          <tr><td><label for="danceability">Danceability</label><td>
-          <input type="range" min="0" max="1" value=".5" step="0.01" id="danceability" step="1" oninput="outputUpdate('danceability_value', value)">
+          <tr><td><input type="checkbox" id="danceability_toggle"><label for="danceability">Danceability</label><td>
+          <input type="range" min="0" max="1" value=".5" step="0.01" id="danceability" step="1" oninput="outputUpdate('Danceability_value', value)">
           <output for="danceability" id="danceability_value">0.5</output><br>
 
-          <tr><td><label for="energy">Energy</label><td>
-          <input type="range" min="0" max="1" value=".5" step="0.01" id="energy" step="1" oninput="outputUpdate('energy_value', value)">
+          <tr><td><input type="checkbox" id="energy_toggle"><label for="energy">Energy</label><td>
+          <input type="range" min="0" max="1" value=".5" step="0.01" id="energy" step="1" oninput="outputUpdate('Energy_value', value)">
           <output for="energy" id="energy_value">0.5</output><br>
 
-          <tr><td><label for="instrumentalness">Instrumentalness</label><td>
-          <input type="range" min="0" max="1" value=".5" step="0.01" id="instrumentalness" step="1" oninput="outputUpdate('instrumentalness_value', value)">
+          <tr><td><input type="checkbox" id="instrumentalness_toggle"><label for="instrumentalness">Instrumentalness</label><td>
+          <input type="range" min="0" max="1" value=".5" step="0.01" id="instrumentalness" step="1" oninput="outputUpdate('Instrumentalness_value', value)">
           <output for="instrumentalness" id="instrumentalness_value">0.5</output><br>
 
-          <tr><td><label for="liveness">Liveness</label><td>
-          <input type="range" min="0" max="1" value=".5" step="0.01" id="liveness" step="1" oninput="outputUpdate('liveness_value', value)">
+          <tr><td><input type="checkbox" id="liveness_toggle"><label for="liveness">Liveness</label><td>
+          <input type="range" min="0" max="1" value=".5" step="0.01" id="liveness" step="1" oninput="outputUpdate('Liveness_value', value)">
           <output for="liveness" id="liveness_value">0.5</output><br>
 
-          <tr><td><label for="loudness">Loudness</label><td>
-          <input type="range" min="0" max="1" value=".5" step="0.01" id="loudness" step="1" oninput="outputUpdate('loudness_value', value)">
+          <tr><td><input type="checkbox" id="loudness_toggle"><label for="loudness">Loudness</label><td>
+          <input type="range" min="0" max="1" value=".5" step="0.01" id="loudness" step="1" oninput="outputUpdate('Loudness_value', value)">
           <output for="loudness" id="loudness_value">0.5</output><br>
 
-          <tr><td><label for="loudness">Loudness</label><td>
-          <input type="range" min="0" max="1" value=".5" step="0.01" id="loudness" step="1" oninput="outputUpdate('loudness_value', value)">
-          <output for="loudness" id="loudness_value">0.5</output><br>
-
-          <tr><td><label for="mode">Mode</label><td>
+          <tr><td><input type="checkbox" id="mode_toggle"><label for="mode">Mode</label><td>
           <input type="radio" name="mode" value="1" checked> Major
           <input type="radio" name="mode" value="0"> Minor<br>
 
-          <tr><td><label for="popularity">Popularity</label><td>
-          <input type="range" min="0" max="100" value="50" step="1" id="popularity" step="1" oninput="outputUpdate('popularity_value', value)">
+          <tr><td><input type="checkbox" id="popularity_toggle"><label for="popularity">Popularity</label><td>
+          <input type="range" min="0" max="100" value="50" step="1" id="popularity" step="1" oninput="outputUpdate('Popularity_value', value)">
           <output for="popularity" id="popularity_value">50</output><br>
 
-          <tr><td><label for="speechiness">Speechiness</label><td>
-          <input type="range" min="0" max="1" value=".5" step="0.01" id="speechiness" step="1" oninput="outputUpdate('speechiness_value', value)">
+          <tr><td><input type="checkbox" id="speechiness_toggle"><label for="speechiness">Speechiness</label><td>
+          <input type="range" min="0" max="1" value=".5" step="0.01" id="speechiness" step="1" oninput="outputUpdate('Speechiness_value', value)">
           <output for="speechiness" id="speechiness_value">0.5</output><br>
 
-          <tr><td><label for="valence">Valence</label><td>
-          <input type="range" min="0" max="1" value=".5" step="0.01" id="valence" step="1" oninput="outputUpdate('valence_value', value)">
+          <tr><td><input type="checkbox" id="valence_toggle"><label for="valence">Valence</label><td>
+          <input type="range" min="0" max="1" value=".5" step="0.01" id="valence" step="1" oninput="outputUpdate('Valence_value', value)">
           <output for="valence" id="valence_value">0.5</output><br>
         </table>
         <input type="submit">
@@ -113,7 +109,7 @@ function artistSearch() {
 function updateSeedArtists() {
   results = "<ul>";
   for(var i=0, band; band=seedartists[i]; i++){
-    results += "<li>" + band.name;
+    results += "<li><button onclick=\"removeArtist('" + band.id + "')\">remove</button>" + band.name;
   }
   results += "</ul>";
   $("#seedartistsdisplay").html(results);
@@ -122,6 +118,17 @@ function updateSeedArtists() {
 function addArtist(name, id) {
   console.log(name + " AAA " + id);
   seedartists.push({"name": name, "id": id});
+  updateSeedArtists();
+}
+
+// remove an artist from the list of seeds
+function removeArtist(id) {
+  for(var i=0, band; band=seedartists[i]; i++){
+    if(band.id == id) {
+      seedartists.splice(i, 1);
+      break;
+    }
+  }
   updateSeedArtists();
 }
 
@@ -135,9 +142,31 @@ function getRecs() {
     artistIDs += band.id;
     if(i+1 != seedartists.length) artistIDs += ",";
   }
+  params = getKnobValues();
+  params.artist_id = artistIDs;
+  $.get("/recs", params).done(printRecs);
+}
 
-  $.get("/recs", {"artist_id": artistIDs})
-  .done(printRecs);
+function getKnobValues() {
+  values = {};
+  categories = [
+    "acousticness",
+    "danceability",
+    "energy",
+    "instrumentalness",
+    "liveness",
+    "loudness",
+    "mode",
+    "popularity",
+    "speechiness",
+    "valence",
+  ];
+  for(var i=0, cat; cat=categories[i]; i++) {
+    if($("#" + cat + "_toggle").is(':checked')) {
+      values[cat] = document.querySelector('#' + cat).value;
+    }
+  }
+  return values;
 }
 
 // display recommendations
