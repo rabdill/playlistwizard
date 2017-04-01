@@ -16,7 +16,6 @@ func GetRecs(input RecommendationSettings) ([]Track, error) {
   if(err != nil) {
     return []Track{}, err
   }
-  fmt.Printf("TOKEN ISSSS %s", Token)
   req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", Token))
   req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
