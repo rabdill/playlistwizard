@@ -39,6 +39,7 @@ func GetToken() string {
   buf := new(bytes.Buffer)
   buf.ReadFrom(resp.Body)
   if(resp.StatusCode != 200) {
+    fmt.Printf("\n\nSTATUS: %d\n\n", resp.StatusCode)
     panic(buf.String())
   }
 

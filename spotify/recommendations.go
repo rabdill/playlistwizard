@@ -166,6 +166,8 @@ func buildRecQuery(input RecommendationSettings, url string) (string, error) {
     result["seed_artists"] = input.Seed_artists
   }
 
+  result["limit"] = "100"
+
   // build the actual URL (this request is NEVER SENT)
   req, err := http.NewRequest("GET", url, nil)
   if err != nil {
