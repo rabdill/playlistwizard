@@ -13,11 +13,11 @@ type TokenResponse struct{
 }
 
 var Token string // holds the access token for Spotify
+var SpotClient = os.Getenv("spotClient") // the client ID, used for logins
 
 func GetToken() string {
-  spotClient := os.Getenv("spotClient")
   spotSecret := os.Getenv("spotSecret")
-  combo := fmt.Sprintf("%s:%s", spotClient, spotSecret)
+  combo := fmt.Sprintf("%s:%s", SpotClient, spotSecret)
 
   zing := base64.StdEncoding.EncodeToString([]byte(combo))
 

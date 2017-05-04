@@ -91,6 +91,7 @@
 
     <div>
       <h2>Results</h2>
+      <a href="https://accounts.spotify.com/authorize?client_id={{ .client_id }}&redirect_uri=http:%2F%2Flocalhost:8080&response_type=token&scope=playlist-modify-private">GOOOO</a>
       <div id="tracks"></div>
     </div>
 
@@ -109,7 +110,6 @@ function outputUpdate(id, val) {
 
 // get options for seed artists based on a typed name:
 function artistSearch() {
-  //$.get( "/search?artist_name=" + $("#artistsearch").val(), {})
   $.get( "/search", {"artist_name": $("#artistsearch").val()})
   .done(function( data ) {
     results = "";

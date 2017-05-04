@@ -25,7 +25,7 @@ func main() {
 
 func index(c *gin.Context) {
   c.HTML(http.StatusOK, "index.tmpl", gin.H{
-    "title": "Main website",
+    "client_id": spotify.SpotClient,
   })
 }
 
