@@ -95,6 +95,28 @@ function printRecs(data) {
   $("#tracks").html(results);
 }
 
+function exportPlaylist() {
+  playlist_name = document.getElementById("playlistname").value;
+
+  $.ajax({
+    url: "https://api.spotify.com/v1/users/" + USERID + "/playlists",
+    type: "POST",
+    beforeSend: function(request) {
+      request.setRequestHeader("Authorization", "Bearer " + USERTOKEN);
+      request.setRequestHeader("Content-Type", "application/json");
+    },
+    data: `{"name": "` + playlist_name + `", "public": false, "description": \"Created by Playlist Wizard.\"}` // NOTE: This has to be a string, not a JS object.
+    // TODO: block injection point here in playlist_name
+  })
+  .done(function( data ) {
+    console.log("HOLY CRAP IT WORKED?");
+    console.log(data);
+  })
+  .fail(function(err) {
+    console.log("SOMETHING BROKE IN EXPORT");
+    console.log(err.responseJSON.error);
+  });
+}
 // turns a hash fragment passed to the function into
 // key/value pairs
 function splitHashValues(hashfrag) {
@@ -107,12 +129,13 @@ function splitHashValues(hashfrag) {
   return answer;
 }
 
+var USERTOKEN, USERID;
 // indicates a user is already logged in
 function setUser(username) {
+  USERID = username;
   document.getElementById("userdisplay").innerHTML = "Welcome, " + username + "!";
 }
 // on pageload, look to see if there is a user token in the URL.
-var USERTOKEN;
 function checkForUser() {
   if(!window.location.hash) return;
   fragment = _.trimStart(window.location.hash, '#');
