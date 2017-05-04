@@ -32,7 +32,6 @@ function updateSeedArtists() {
 }
 // add an artist to the list of seeds
 function addArtist(name, id) {
-  console.log(name + " AAA " + id);
   seedartists.push({"name": name, "id": id});
   updateSeedArtists();
 }
@@ -50,8 +49,6 @@ function removeArtist(id) {
 
 // send the seed artist, get the recs:
 function getRecs() {
-  console.log(seedartists);
-
   artistIDs = "";
   for(var i=0, band; band=seedartists[i]; i++){
     artistIDs += band.id;
@@ -97,3 +94,50 @@ function printRecs(data) {
   if(data.length == 0) results="Sorry, no tracks found.";
   $("#tracks").html(results);
 }
+
+// turns a hash fragment passed to the function into
+// key/value pairs
+function splitHashValues(hashfrag) {
+  var answer = {};
+  var components = _.words(hashfrag, /[^&]+/g);
+  for(var i=0; i < components.length; i++) {
+    var split = _.split(components[i], '=', 2);
+    answer[split[0]] = split[1];
+  }
+  return answer;
+}
+
+// indicates a user is already logged in
+function setUser(username) {
+  document.getElementById("userdisplay").innerHTML = "Welcome, " + username + "!";
+}
+// on pageload, look to see if there is a user token in the URL.
+var USERTOKEN;
+function checkForUser() {
+  if(!window.location.hash) return;
+  fragment = _.trimStart(window.location.hash, '#');
+  params = splitHashValues(fragment);
+  USERTOKEN = params.access_token;
+  getUserData();
+}
+
+// use the token we have to fetch a user's profile.
+function getUserData() {
+  $.ajax({
+    url: "https://api.spotify.com/v1/me",
+    type: "GET",
+    beforeSend: function(request) {
+      request.setRequestHeader("Authorization", "Bearer " + USERTOKEN);
+    }
+  })
+  .done(function( data ) {
+    setUser(data.id);
+  })
+  .fail(function(err) {
+    console.log("SOMETHING BROKE IN HERE");
+    console.log(err);
+  });
+}
+
+// when the page loads this script, check for a user and process it
+checkForUser();

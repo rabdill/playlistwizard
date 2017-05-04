@@ -16,6 +16,11 @@
         </div>
       </div>
       <div class="row">
+        <div class="col-sm-12" id="userdisplay">
+          <a href="https://accounts.spotify.com/authorize?client_id={{ .client_id }}&redirect_uri=http:%2F%2Flocalhost:8080&response_type=token&scope=playlist-modify-private">Log in</a>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-sm-6">
           <h2>Song parameters</h2>
           <table>
@@ -91,10 +96,10 @@
 
     <div>
       <h2>Results</h2>
-      <a href="https://accounts.spotify.com/authorize?client_id={{ .client_id }}&redirect_uri=http:%2F%2Flocalhost:8080&response_type=token&scope=playlist-modify-private">GOOOO</a>
       <div id="tracks"></div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.2.1.min.js"
       integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
