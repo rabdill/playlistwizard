@@ -85,14 +85,47 @@ function getKnobValues() {
   return values;
 }
 
+var TRACK_IDS = [];
 // display recommendations
 function printRecs(data) {
   results = "<ul>"
   for(var i=0, rec; rec=data[i]; i++){
-      results += "<li>" + rec.artists[0].name + ", \"" + rec.name + "\""
+    results += "<li>" + rec.artists[0].name + ", \"" + rec.name + "\"";
+    TRACK_IDS.push(rec.id);
   }
   if(data.length == 0) results="Sorry, no tracks found.";
   $("#tracks").html(results);
+}
+
+// called by the exportPlaylist() function, which only creates an empty list
+function addTracksToList(playlist_id) {
+  var toSend = `{"uris":[`;
+  // build the JSON body full of Spotify track URIs
+  for(var i=0; i < TRACK_IDS.length; i++) {
+    toSend += `"spotify:track:` + TRACK_IDS[i] + `"`;
+    if(i != TRACK_IDS.length - 1) toSend += ",";
+  }
+  toSend += `]}`;
+
+  // send that badass request
+  $.ajax({
+    url: "https://api.spotify.com/v1/users/" + USERID + "/playlists/" + playlist_id + "/tracks",
+    type: "POST",
+    beforeSend: function(request) {
+      request.setRequestHeader("Authorization", "Bearer " + USERTOKEN);
+      request.setRequestHeader("Content-Type", "application/json");
+    },
+    data: toSend
+  })
+  .done(function( data ) {
+    console.log("We sent the tracks!!!");
+    console.log(data);
+    addTracksToList(data.id);
+  })
+  .fail(function(err) {
+    console.log("SOMETHING BROKE IN TRACK ADD");
+    console.log(err.responseJSON.error);
+  });
 }
 
 function exportPlaylist() {
@@ -111,6 +144,7 @@ function exportPlaylist() {
   .done(function( data ) {
     console.log("HOLY CRAP IT WORKED?");
     console.log(data);
+    addTracksToList(data.id);
   })
   .fail(function(err) {
     console.log("SOMETHING BROKE IN EXPORT");
