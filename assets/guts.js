@@ -1,5 +1,6 @@
 var seedartists = [];
 
+// updates labels to reflect value of their slider; called from index
 function outputUpdate(id, val) {
 	document.querySelector('#' + id).value = val;
 }
@@ -16,7 +17,7 @@ function artistSearch() {
     $("#artistoptions").html(results);
   })
   .fail(function(err) {
-    console.log("SOMETHING BROKE");
+    console.log("Error in artist search:");
     console.log(err);
   });
 }
@@ -59,6 +60,7 @@ function getRecs() {
   $.get("/recs", params).done(printRecs);
 }
 
+// translate sliders into key/value pairs
 function getKnobValues() {
   values = {};
   categories = [
@@ -85,8 +87,9 @@ function getKnobValues() {
   return values;
 }
 
+// used for storing the IDs of recommended tracks
 var TRACK_IDS = [];
-// display recommendations
+// display recommendations in list
 function printRecs(data) {
   results = "<ul>"
   for(var i=0, rec; rec=data[i]; i++){
@@ -107,7 +110,7 @@ function addTracksToList(playlist_id) {
   }
   toSend += `]}`;
 
-  // send that badass request
+  // send request
   $.ajax({
     url: "https://api.spotify.com/v1/users/" + USERID + "/playlists/" + playlist_id + "/tracks",
     type: "POST",
@@ -118,16 +121,16 @@ function addTracksToList(playlist_id) {
     data: toSend
   })
   .done(function( data ) {
-    console.log("We sent the tracks!!!");
+    console.log("Tracks successfully added.");
     console.log(data);
-    addTracksToList(data.id);
   })
   .fail(function(err) {
-    console.log("SOMETHING BROKE IN TRACK ADD");
+    console.log("Error adding tracks to playlist:");
     console.log(err.responseJSON.error);
   });
 }
 
+// create playlist, add tracks
 function exportPlaylist() {
   playlist_name = document.getElementById("playlistname").value;
 
@@ -142,17 +145,18 @@ function exportPlaylist() {
     // TODO: block injection point here in playlist_name
   })
   .done(function( data ) {
-    console.log("HOLY CRAP IT WORKED?");
-    console.log(data);
+    console.log("Playlist created:");
+    console.log(data.id);
     addTracksToList(data.id);
   })
   .fail(function(err) {
-    console.log("SOMETHING BROKE IN EXPORT");
+    console.log("Error creating empty playlist:");
     console.log(err.responseJSON.error);
   });
 }
+
 // turns a hash fragment passed to the function into
-// key/value pairs
+// key/value pairs. used to pull data from window URL
 function splitHashValues(hashfrag) {
   var answer = {};
   var components = _.words(hashfrag, /[^&]+/g);
@@ -163,11 +167,16 @@ function splitHashValues(hashfrag) {
   return answer;
 }
 
+// user data for authenticating back to spotify
 var USERTOKEN, USERID;
-// indicates a user is already logged in
+// if a user is logged in, let them do all the nice logged-in stuff
 function setUser(username) {
   USERID = username;
   document.getElementById("userdisplay").innerHTML = "Welcome, " + username + "!";
+
+  var exportbutton = document.getElementById("exportbutton");
+  exportbutton.disabled = false;
+  exportbutton.innerHTML = "Export!";
 }
 // on pageload, look to see if there is a user token in the URL.
 function checkForUser() {
@@ -178,7 +187,7 @@ function checkForUser() {
   getUserData();
 }
 
-// use the token we have to fetch a user's profile.
+// use a token to fetch a user's profile.
 function getUserData() {
   $.ajax({
     url: "https://api.spotify.com/v1/me",
@@ -191,8 +200,8 @@ function getUserData() {
     setUser(data.id);
   })
   .fail(function(err) {
-    console.log("SOMETHING BROKE IN HERE");
-    console.log(err);
+    console.log("Error fetching user data:");
+    console.log(err.responseJSON.error);
   });
 }
 
