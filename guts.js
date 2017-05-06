@@ -49,6 +49,7 @@ function outputUpdate(id, val) {
 
 // get options for seed artists based on a typed name:
 function artistSearch() {
+	document.getElementById("artistspinner").style.display = "block";
 	$.get("https://api.spotify.com/v1/search?q=" + $("#artistsearch").val() + "&type=artist")
   .done(function( data ) {
     results = "";
@@ -62,6 +63,7 @@ function artistSearch() {
     console.log("Error in artist search:");
     console.log(err);
   });
+	document.getElementById("artistspinner").style.display = "none";
 }
 
 // check if we have enough data for a recommendations request
@@ -101,6 +103,7 @@ function removeArtist(id) {
 
 // send the seed artist, get the recs:
 function getRecs() {
+	document.getElementById("resultspinner").style.display = "block";
   artistIDs = "";
   for(var i=0, band; band=seedartists[i]; i++){
     artistIDs += band.id;
@@ -117,6 +120,7 @@ function getRecs() {
     },
     data: params
   }).done(printRecs);
+	// TODO: catch errors here
 }
 
 // translate sliders into key/value pairs
@@ -142,6 +146,7 @@ function printRecs(data) {
   }
   if(data.tracks.length == 0) results="Sorry, no tracks found.";
   $("#tracks").html(results);
+	document.getElementById("resultspinner").style.display = "none";
 }
 
 // called by the exportPlaylist() function, which only creates an empty list
@@ -185,7 +190,7 @@ function exportPlaylist() {
       request.setRequestHeader("Authorization", "Bearer " + USERTOKEN);
       request.setRequestHeader("Content-Type", "application/json");
     },
-    data: `{"name": "` + playlist_name + `", "public": false, "description": \"Created by Playlist Wizard.\"}` // NOTE: This has to be a string, not a JS object.
+    data: `{"name": "` + playlist_name + `", "public": false, "description": \"Created by Super Tuner.\"}` // NOTE: This has to be a string, not a JS object.
     // TODO: block injection point here in playlist_name
   })
   .done(function( data ) {
