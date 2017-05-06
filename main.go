@@ -1,6 +1,5 @@
 package main
 
-import "net/http"
 import "gopkg.in/gin-gonic/gin.v1"
 import "github.com/rabdill/playlister/spotify"
 
@@ -9,13 +8,7 @@ func main() {
   // logger and recovery (crash-free) middleware
   router := gin.Default()
 
-  router.LoadHTMLGlob("index.tmpl")
-
   spotify.Token = spotify.GetToken()
-
-  router.GET("/", index)
-  router.GET("/recs", recs)
-  router.GET("/search", search)
 
   router.Static("/assets", "./assets")
   // By default it serves on :8080 unless a
@@ -24,11 +17,6 @@ func main() {
   // router.Run(":3000") for a hard coded port
 }
 
-func index(c *gin.Context) {
-  c.HTML(http.StatusOK, "index.tmpl", gin.H{
-    "client_id": spotify.SpotClient,
-  })
-}
 
 func recs(c *gin.Context) {
   seed := c.DefaultQuery("artist_id", "2ye2Wgw4gimLv2eAKyk1NB")

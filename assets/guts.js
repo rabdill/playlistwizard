@@ -7,10 +7,10 @@ function outputUpdate(id, val) {
 
 // get options for seed artists based on a typed name:
 function artistSearch() {
-  $.get( "/search", {"artist_name": $("#artistsearch").val()})
+	$.get("https://api.spotify.com/v1/search?q=" + $("#artistsearch").val() + "&type=artist")
   .done(function( data ) {
     results = "";
-    for(var i=0, band; band=data[i]; i++){
+    for(var i=0, band; band=data.artists.items[i]; i++){
       results += "<button onclick=\"addArtist('" + band.name + "', '" + band.id + "')\">" + band.name + "</button><br>";
     }
     if(data.length == 0) results = "Sorry, no artists found.";
@@ -59,8 +59,16 @@ function getRecs() {
     if(i+1 != seedartists.length) artistIDs += ",";
   }
   params = getKnobValues();
-  params.artist_id = artistIDs;
-  $.get("/recs", params).done(printRecs);
+  params.seed_artists = artistIDs;
+	$.ajax({
+    url: "https://api.spotify.com/v1/recommendations",
+    type: "GET",
+    beforeSend: function(request) {
+      request.setRequestHeader("Authorization", "Bearer " + USERTOKEN);
+      request.setRequestHeader("Content-Type", "application/json");
+    },
+    data: params
+  }).done(printRecs);
 }
 
 // translate sliders into key/value pairs
@@ -80,13 +88,14 @@ function getKnobValues() {
   ];
   for(var i=0, cat; cat=categories[i]; i++) {
     if($("#" + cat + "_toggle").is(':checked')) {
-      values[cat] = document.querySelector('#' + cat).value;
+      values["target_" + cat] = document.querySelector('#' + cat).value;
     }
   }
   // the "Mode" value is handled differently:
-  if($("#mode_toggle").is(':checked')) {
-    values["mode"] = $('input[name=mode]:checked').val();
-  }
+  // if($("#mode_toggle").is(':checked')) {
+  //   values["mode"] = $('input[name=mode]:checked').val();
+  // }
+	console.log(values);
   return values;
 }
 
@@ -95,11 +104,11 @@ var TRACK_IDS = [];
 // display recommendations in list
 function printRecs(data) {
   results = "<ul>"
-  for(var i=0, rec; rec=data[i]; i++){
+  for(var i=0, rec; rec=data.tracks[i]; i++){
     results += "<li>" + rec.artists[0].name + ", \"" + rec.name + "\"";
     TRACK_IDS.push(rec.id);
   }
-  if(data.length == 0) results="Sorry, no tracks found.";
+  if(data.tracks.length == 0) results="Sorry, no tracks found.";
   $("#tracks").html(results);
 }
 
