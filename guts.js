@@ -29,7 +29,7 @@ function createKnobs() {
 
 		toWrite += `<tr><td><input type="checkbox" id="` + knob + `_toggle"><label for="` + knob + `">` + knob + `</label><td>
 		<input type="range" min="0" max="` + max + `" value="` + start_val + `" step="` + step + `" id="` + knob + `" oninput="outputUpdate('` + knob + `_value', value)">
-		<td><output for="` + knob + `" id="` + knob + `_value">0.5</output>`;
+		<td><output for="` + knob + `" id="` + knob + `_value">` + start_val + `</output>`;
 	}
 	table.innerHTML = toWrite;
 }
@@ -39,7 +39,7 @@ function setLoginUrl() {
 	var client_id = "6869dc1d98d84251b578e6a0a3f81731";
 	// **************
 
-	document.getElementById("loginlink").href = "https://accounts.spotify.com/authorize?client_id=" + client_id + "&redirect_uri=" + encodeURIComponent(window.location.href) + "&response_type=token&scope=playlist-modify-private";
+	document.getElementById("loginlink").innerHTML = `<a href="https://accounts.spotify.com/authorize?client_id=` + client_id + `&redirect_uri=` + encodeURIComponent(window.location.href) + `&response_type=token&scope=playlist-modify-private">Click here to get started.</a>`;
 }
 
 // updates labels to reflect value of their slider; called from index
@@ -213,8 +213,9 @@ function splitHashValues(hashfrag) {
 
 // if a user is logged in, let them do all the nice logged-in stuff
 function setUser(username) {
+	console.log("Logged in.")
   USERID = username;
-  document.getElementById("userdisplay").innerHTML = "Welcome, " + username + "!";
+	document.getElementById("loginlink").innerHTML = "<strong>Welcome, " + username + "!</strong>";
 
   var exportbutton = document.getElementById("exportbutton");
   exportbutton.disabled = false;

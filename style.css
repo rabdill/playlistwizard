@@ -1,0 +1,47 @@
+#spotify_logo {
+  height: 62px;
+  padding-bottom: 6px;
+}
+
+#gap {
+  border-right: 1px solid #919496;
+  padding-left: 20px;
+  margin-right: 20px;
+}
+h1 {
+  font-family: 'Roboto Condensed', sans-serif;
+  color: #FFFFFF;
+}
+
+/* Only show the Github ribbon on larger screens */
+@media (max-width: 768px) {
+  #forkme {
+    display: none;
+  }
+}
+/* This whole is is just so the header will be lined up with
+    everything else in the container, but the header background will
+    extend to the margins.
+    */
+#header {
+  background-color: #191414;
+}
+#headercontainer {
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 768px) {
+  #headercontainer {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  #headercontainer {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  #headercontainer {
+    width: 1170px;
+  }
+}
