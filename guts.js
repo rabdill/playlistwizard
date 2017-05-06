@@ -1,4 +1,44 @@
 var seedartists = [];
+var knobs = [
+	"acousticness",
+	"danceability",
+	"energy",
+	"instrumentalness",
+	"liveness",
+	"loudness",
+	"popularity",
+	"speechiness",
+	"valence",
+];
+
+function createKnobs() {
+	var table = document.getElementById("knobtable");
+	var toWrite = "";
+	for(var i=0, knob; knob=knobs[i]; i++) {
+		var step = 0.01;
+		var max = 1;
+		var start_val = 0.5;
+		if(knob == "popularity") {
+			 // no idea why this has to be on a different scale
+			step = 1.0;
+			max = 100;
+			start_val = 50;
+		}
+
+		toWrite += `<tr><td><input type="checkbox" id="` + knob + `_toggle"><label for="` + knob + `">` + knob + `</label><td>
+		<input type="range" min="0" max="` + max + `" value="` + start_val + `" step="` + step + `" id="` + knob + `" oninput="outputUpdate('` + knob + `_value', value)">
+		<td><output for="` + knob + `" id="` + knob + `_value">0.5</output>`;
+	}
+	table.innerHTML = toWrite;
+}
+
+function setLoginUrl() {
+	// **** SET THIS TO YOUR SPOTIFY APP CLIENT ID
+	var client_id = "6869dc1d98d84251b578e6a0a3f81731";
+	// **************
+
+	document.getElementById("loginlink").href = "https://accounts.spotify.com/authorize?client_id=" + client_id + "&redirect_uri=" + encodeURIComponent(window.location.href) + "&response_type=token&scope=playlist-modify-private";
+}
 
 // updates labels to reflect value of their slider; called from index
 function outputUpdate(id, val) {
@@ -74,27 +114,11 @@ function getRecs() {
 // translate sliders into key/value pairs
 function getKnobValues() {
   values = {};
-  categories = [
-    "acousticness",
-    "danceability",
-    "energy",
-    "instrumentalness",
-    "liveness",
-    "loudness",
-    //"mode",
-    "popularity",
-    "speechiness",
-    "valence",
-  ];
-  for(var i=0, cat; cat=categories[i]; i++) {
-    if($("#" + cat + "_toggle").is(':checked')) {
-      values["target_" + cat] = document.querySelector('#' + cat).value;
+  for(var i=0, knob; knob=knobs[i]; i++) {
+    if($("#" + knob + "_toggle").is(':checked')) {
+      values["target_" + knob] = document.querySelector('#' + knob).value;
     }
   }
-  // the "Mode" value is handled differently:
-  // if($("#mode_toggle").is(':checked')) {
-  //   values["mode"] = $('input[name=mode]:checked').val();
-  // }
 	console.log(values);
   return values;
 }
@@ -217,5 +241,9 @@ function getUserData() {
   });
 }
 
+// add sliders for each metric
+createKnobs();
+// fill in the app-specific data
+setLoginUrl();
 // when the page loads this script, check for a user and process it
 checkForUser();
