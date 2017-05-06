@@ -1,49 +1,49 @@
 #spotify_logo {
-  height: 64px;
-  padding-bottom: 8px;
+	height: 64px;
+	padding-bottom: 8px;
 }
 
 #gap {
-  border-right: 1px solid #919496;
-  padding-left: 20px;
-  margin-right: 20px;
+	border-right: 1px solid #919496;
+	padding-left: 20px;
+	margin-right: 20px;
 }
 h1 {
-  font-family: 'Roboto Condensed', sans-serif;
-  color: #FFFFFF;
+	font-family: 'Roboto Condensed', sans-serif;
+	color: #FFFFFF;
 }
 
 /* Only show the Github ribbon on larger screens */
 @media (max-width: 768px) {
-  #forkme {
-    display: none;
-  }
+	#forkme {
+		display: none;
+	}
 }
 /* This whole is is just so the header will be lined up with
-    everything else in the container, but the header background will
-    extend to the margins.
-    */
+		everything else in the container, but the header background will
+		extend to the margins.
+		*/
 #header {
-  background-color: #191414;
+	background-color: #191414;
 }
 #headercontainer {
-  margin-right: auto;
-  margin-left: auto;
+	margin-right: auto;
+	margin-left: auto;
 }
 @media (min-width: 768px) {
-  #headercontainer {
-    width: 750px;
-  }
+	#headercontainer {
+		width: 750px;
+	}
 }
 @media (min-width: 992px) {
-  #headercontainer {
-    width: 970px;
-  }
+	#headercontainer {
+		width: 970px;
+	}
 }
 @media (min-width: 1200px) {
-  #headercontainer {
-    width: 1170px;
-  }
+	#headercontainer {
+		width: 1170px;
+	}
 }
 
 
@@ -52,43 +52,43 @@ h1 {
 MIT license
 */
 .spinner {
-  width: 40px;
-  height: 40px;
+	width: 40px;
+	height: 40px;
 
-  position: relative;
-  margin: 100px auto;
+	position: relative;
+	margin: 100px auto;
 }
 
 .double-bounce1, .double-bounce2 {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background-color: #333;
-  opacity: 0.6;
-  position: absolute;
-  top: 0;
-  left: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background-color: #333;
+	opacity: 0.6;
+	position: absolute;
+	top: 0;
+	left: 0;
 
-  -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
-  animation: sk-bounce 2.0s infinite ease-in-out;
+	-webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+	animation: sk-bounce 2.0s infinite ease-in-out;
 }
 
 .double-bounce2 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
+	-webkit-animation-delay: -1.0s;
+	animation-delay: -1.0s;
 }
 
 @-webkit-keyframes sk-bounce {
-  0%, 100% { -webkit-transform: scale(0.0) }
-  50% { -webkit-transform: scale(1.0) }
+	0%, 100% { -webkit-transform: scale(0.0) }
+	50% { -webkit-transform: scale(1.0) }
 }
 
 @keyframes sk-bounce {
-  0%, 100% {
-    transform: scale(0.0);
-    -webkit-transform: scale(0.0);
-  } 50% {
-    transform: scale(1.0);
-    -webkit-transform: scale(1.0);
-  }
+	0%, 100% {
+		transform: scale(0.0);
+		-webkit-transform: scale(0.0);
+	} 50% {
+		transform: scale(1.0);
+		-webkit-transform: scale(1.0);
+	}
 }
