@@ -1,4 +1,6 @@
 var seedartists = [];
+// user data for authenticating back to spotify
+var USERTOKEN="", USERID;
 var knobs = [
 	"acousticness",
 	"danceability",
@@ -62,6 +64,13 @@ function artistSearch() {
   });
 }
 
+// check if we have enough data for a recommendations request
+function assessRecsButton() {
+	document.getElementById("seed_required").hidden = (seedartists.length > 0);
+	document.getElementById("login_required").hidden = (USERTOKEN != "");
+	document.getElementById("recsbutton").disabled = !(USERTOKEN && seedartists.length > 0);
+}
+
 // print the seed artists
 function updateSeedArtists() {
   results = "<ul>";
@@ -71,8 +80,7 @@ function updateSeedArtists() {
   results += "</ul>";
   $("#seedartistsdisplay").html(results);
 
-	// if there's at least one see artist, let them ask for recs
-	document.getElementById("recsbutton").disabled = (seedartists.length == 0);
+	assessRecsButton();
 }
 // add an artist to the list of seeds
 function addArtist(name, id) {
@@ -203,8 +211,6 @@ function splitHashValues(hashfrag) {
   return answer;
 }
 
-// user data for authenticating back to spotify
-var USERTOKEN, USERID;
 // if a user is logged in, let them do all the nice logged-in stuff
 function setUser(username) {
   USERID = username;
@@ -220,6 +226,7 @@ function checkForUser() {
   fragment = _.trimStart(window.location.hash, '#');
   params = splitHashValues(fragment);
   USERTOKEN = params.access_token;
+	assessRecsButton();
   getUserData();
 }
 
