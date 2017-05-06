@@ -30,6 +30,9 @@ function updateSeedArtists() {
   }
   results += "</ul>";
   $("#seedartistsdisplay").html(results);
+
+	// if there's at least one see artist, let them ask for recs
+	document.getElementById("recsbutton").disabled = (seedartists.length == 0);
 }
 // add an artist to the list of seeds
 function addArtist(name, id) {
