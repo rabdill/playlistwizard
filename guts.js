@@ -1,3 +1,8 @@
+// **** APP CONFIG:
+var client_id = "6869dc1d98d84251b578e6a0a3f81731"; // spotify app client ID
+var root_url = "http://localhost:8000/" // where the main page of your app lives
+// **************
+
 var seedartists = [];
 // user data for authenticating back to spotify
 var USERTOKEN="", USERID;
@@ -35,11 +40,7 @@ function createKnobs() {
 }
 
 function setLoginUrl() {
-	// **** SET THIS TO YOUR SPOTIFY APP CLIENT ID
-	var client_id = "6869dc1d98d84251b578e6a0a3f81731";
-	// **************
-
-	document.getElementById("loginlink").innerHTML = `<a href="https://accounts.spotify.com/authorize?client_id=` + client_id + `&redirect_uri=` + encodeURIComponent(window.location.href) + `&response_type=token&scope=playlist-modify-private">Click here to get started.</a>`;
+	document.getElementById("loginlink").innerHTML = `<a href="https://accounts.spotify.com/authorize?client_id=` + client_id + `&redirect_uri=` + encodeURIComponent(root_url) + `&response_type=token&scope=playlist-modify-private">Click here to get started.</a>`;
 }
 
 // updates labels to reflect value of their slider; called from index
@@ -229,7 +230,7 @@ function splitHashValues(hashfrag) {
 function setUser(user) {
 	// User name:
 	USERID = user.id;
-	document.getElementById("loginlink").innerHTML = "<strong>Welcome, " + user.id + "!</strong>";
+	document.getElementById("loginlink").innerHTML = `<strong>Welcome, ` + user.id + `!</strong> | <a href="` + root_url + `">(Log out)</a>`;
 
 	// Profile pic:
 	if(user.images.length > 0) {
