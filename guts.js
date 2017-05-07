@@ -54,7 +54,7 @@ function artistSearch() {
 	.done(function( data ) {
 		results = "";
 		for(var i=0, band; band=data.artists.items[i]; i++){
-			results += "<button onclick=\"addArtist('" + band.name + "', '" + band.id + "')\">" + band.name + "</button><br>";
+			results += `<label class="labelbutton label label-success" onclick="addArtist('` + band.name + `', '` + band.id + `')"><span class="glyphicon glyphicon-plus"></span></label>` + band.name + `<br>`;
 		}
 		if(data.length == 0) results = "Sorry, no artists found.";
 		$("#artistoptions").html(results);
@@ -75,11 +75,10 @@ function assessRecsButton() {
 
 // print the seed artists
 function updateSeedArtists() {
-	results = "<ul>";
+	results = "";
 	for(var i=0, band; band=seedartists[i]; i++){
-		results += "<li><button onclick=\"removeArtist('" + band.id + "')\">remove</button>" + band.name;
+		results += `<label class="labelbutton label label-danger" onclick="removeArtist('` + band.id + `')\"><span class="glyphicon glyphicon-minus"></span></label>` + band.name + `<br>`;
 	}
-	results += "</ul>";
 	$("#seedartistsdisplay").html(results);
 
 	assessRecsButton();
@@ -139,9 +138,15 @@ function getKnobValues() {
 var TRACK_IDS = [];
 // display recommendations in list
 function printRecs(data) {
-	results = "<ul>"
+	results = `<ul>`
 	for(var i=0, rec; rec=data.tracks[i]; i++){
-		results += "<li>" + rec.artists[0].name + ", \"" + rec.name + "\"";
+		results += `<label class="labelbutton label label-`
+		if(rec.preview_url) {
+			results += `success" onclick="playPreview('` + rec.preview_url + `')"`
+		} else {
+			results += `default" style="cursor:auto"`
+		}
+		results += `><span class="glyphicon glyphicon-play"></span></label>` + rec.artists[0].name + `, "` + rec.name + `"<br>`;
 		TRACK_IDS.push(rec.id);
 	}
 	if(data.tracks.length == 0) results="Sorry, no tracks found.";
@@ -222,7 +227,6 @@ function splitHashValues(hashfrag) {
 
 // if a user is logged in, let them do all the nice logged-in stuff
 function setUser(user) {
-	console.log(user);
 	// User name:
 	USERID = user.id;
 	document.getElementById("loginlink").innerHTML = "<strong>Welcome, " + user.id + "!</strong>";
@@ -262,6 +266,14 @@ function getUserData() {
 	});
 }
 
+function playPreview(url) {
+	console.log("WE GOT ONE!");
+	console.log(url);
+	var player = document.getElementById("current_preview");
+	console.log(player);
+	player.src = url;
+  player.play();
+}
 // add sliders for each metric
 createKnobs();
 // fill in the app-specific data
