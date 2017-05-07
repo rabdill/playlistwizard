@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Super Tuner: About</title>
+
+		<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="style.css">
+
+	</head>
+	<body>
+		<div class="row" id="header">
+			<div id="headercontainer">
+				<div class="col-xs-9">
+					<a href="index.html"><h1><span id="exclusion"><img src="spotify_logo.png" id="spotify_logo"></span><span id="gap"></span>Super&nbsp;Tuner</h1></a>
+				</div>
+				<div class="col-xs-2">
+					<div id="links">
+						<a href="about.html">About</a>
+					</div>
+				</div>
+			</div>
+			<a href="https://github.com/rabdill/supertuner" id="forkme"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6 col-sm-offset-3">
+					<br>
+					<p><em>NOTE: The Super Tuner for Spotify is an open-source project, which means anyone is free to deploy their own versions of it wherever they want. This page was written by Rich Abdill, the author of the app, for the original deployment of the Super Tuner at richabdill.com. You may be reading it somewhere else, but odds are Rich has no idea it's there. Please don't blame him if this crops up somewhere weird.</em>
+				</div>
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-12">
+							<h2>What is this?</h2>
+							<p>The Super Tuner is a search tool for Spotify that allows users to specify detailed parameters about what they're looking for&mdash;details Spotify knows about, but doesn't make available in their standard player.
+
+							<h2>Who are you?</h2>
+							<p>My name is Rich Abdill. I'm a software developer, and I listen to Spotify for hours a day.
+
+							<p>I am mostly interested in backend development, but this project seemed like a fun excuse to tinker with an interesting interface. I don't work for Spotify, and this tool is pretty much finished; I don't anticipate adding more features.
+
+							<h2>Did Spotify make this app?</h2>
+							<p><em>No.</em> The only affiliation this application has with Spotify is that it uses their API, explained below.
+
+							<h2>How does this work?</h2>
+
+							<p>The Super Tuner uses the <a href="https://developer.spotify.com/web-api/">Spotify Web API</a>, which is an online service that Spotify has made available for developers who want to create new tools for the Spotify ecosystem.
+
+							<p>In particular, the app leverages Spotify's huge collection of <em>track metadata</em>: information about songs (tempo, key, loudness, even how "happy" it sounds) that is available via the API, but doesn't show up anywhere in the app itself.
+
+							<p>This project originally started out as a way for me to practice developing in <a href="https://golang.org/">Golang</a>, a language I currently use at my day job. However, I quickly realized that the whole thing could be done in client-side Javascript and I could save myself a lot of headache: Because the Super Tuner operates entirely in your browser, I don't have to bother with running servers and managing complicated software compilation and release processes&mdash;I just make sure the latest files are available, and your computer does the rest.
+
+							<p>If you're interested in the technical nuts and bolts, <a href="https://github.com/rabdill/supertuner">check out the project on GitHub</a>.
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<h2>Are you stealing my data?</h2>
+					<p>No! I can confidently say that I am not. The Super Tuner doesn't need to store anything about you for it to work. This is between you and Spotify: Whenever you click a button that sends a request&mdash;searching for artists, exporting a playlist, etc.&mdash;that request is sent directly from your computer to the Spotify servers. In fact, I don't even have a way of knowing you've used the Super Tuner at all.
+
+					<p>Which brings me to...
+
+					<h3>Privacy policy</h3>
+					<p>The <a href="https://developer.spotify.com/developer-terms-of-use/">Spotify Developer Terms of Use</a> require me to publish a privacy policy with this app. This is the policy.
+					<ul>
+						<li>There is no user data collected by the Super Tuner. Any data incidentally contained in server logs is available only to administrators and will be deleted on a regular basis. (The only Spotify-specific information that is likely to appear in logs is the user token included in the URL of the page after you have logged in. These expire unconditionally after 60 minutes.)
+						<li>This information will not be shared with any third parties.
+						<li>There is no tracking software (Google Analytics, et. al) embedded in this application, and no visitor data is collected for this purpose. There are no cookies used by Super Tuner, and no third-party cookies are used to collect information about you.
+					</ul>
+
+					<h3>EULA</h3>
+					<p>The Spotify Developer ToS also require me to have an end user license agreement, though it's likely no human will ever have made it far enough down the page to actually get to this part. By using this software, you agree to the following terms:
+					<ul>
+						<li>The Super Tuner does not make any warranties or representations on behalf of Spotify and expressly disclaims all implied warranties with respect to the Spotify Platform, Spotify Service and Spotify Content, including the implied warranties of merchantability, fitness for a particular purpose and non-infringement. This agreement disclaims any liability on the part of Spotify.
+						<li>You will not modify or create derivative works based on the Spotify Platform, Spotify Service or Spotify Content.
+						<li>You will not decompile, reverse-engineer, disassemble, or otherwise reduce the Spotify Platform, Spotify Service, and Spotify Content to source code or other human-perceivable form, prohibited to the full extent allowed by law.
+						<li>Spotify is a third-party beneficiary of the Super Tuner end user license agreement and privacy policy and is entitled to directly enforce the EULA.
+					</ul>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

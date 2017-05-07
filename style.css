@@ -2,7 +2,19 @@
 	height: 64px;
 	padding-bottom: 8px;
 }
-
+#links {
+	margin-top: 45px;
+}
+#links a {
+	color: #1DB954;
+}
+#links a:visited {
+	color: #1DB954;
+}
+#links a:hover {
+	color: #179142;
+	text-decoration: none;
+}
 #gap {
 	border-right: 1px solid #919496;
 	padding-left: 20px;
@@ -95,6 +107,10 @@ fieldset[disabled] .btn-spotify.focus {
 #profpic {
   height: 3em;
   margin-left: 2em;
+}
+
+#headercontainer a:hover {
+	text-decoration: none;
 }
 /* This whole is is just so the header will be lined up with
 		everything else in the container, but the header background will

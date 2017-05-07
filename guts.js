@@ -1,11 +1,26 @@
-// **** APP CONFIG:
-var client_id = "6869dc1d98d84251b578e6a0a3f81731"; // spotify app client ID
-var root_url = "http://localhost:8000/" // where the main page of your app lives
-// **************
+/*
+Super Tuner for Spotify, a metadata-powered playlist generator
+Copyright (C) 2017 Richard Abdill.
 
-var seedartists = [];
-// user data for authenticating back to spotify
-var USERTOKEN="", USERID;
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+var super_tuner = (function() {
+// **** APP CONFIG:
+var client_id = "1234example7094742example"; // spotify app client ID
+var root_url = "http://localhost:8000/" // where the main page of your app lives
+
 var knobs = [
 	"acousticness",
 	"danceability",
@@ -17,9 +32,14 @@ var knobs = [
 	"speechiness",
 	"valence",
 ];
+// **************
 
+var seedartists = []; // for storing artists to be sent with request
+var USERTOKEN="", USERID; // user data for authenticating back to spotify
+var TRACK_IDS = []; // used for storing the IDs of recommended tracks
+
+// iterates through the knobs array and generates sliders for each
 function createKnobs() {
-	var table = document.getElementById("knobtable");
 	var toWrite = "";
 	for(var i=0, knob; knob=knobs[i]; i++) {
 		var step = 0.01;
@@ -33,29 +53,33 @@ function createKnobs() {
 		}
 
 		toWrite += `<tr><td><span class="check"><input type="checkbox" id="` + knob + `_toggle"></span><label for="` + knob + `">` + knob + `</label><td>
-		<input type="range" min="0" max="` + max + `" value="` + start_val + `" step="` + step + `" id="` + knob + `" oninput="outputUpdate('` + knob + `_value', value)">
+		<input type="range" min="0" max="` + max + `" value="` + start_val + `" step="` + step + `" id="` + knob + `" oninput="super_tuner.outputUpdate('` + knob + `_value', value)">
 		<td><output for="` + knob + `" id="` + knob + `_value">` + start_val + `</output>`;
 	}
-	table.innerHTML = toWrite;
+	$("#knobtable").html(toWrite);
 }
 
+// Prints a link to the Spotify auth page
 function setLoginUrl() {
-	document.getElementById("loginlink").innerHTML = `<a href="https://accounts.spotify.com/authorize?client_id=` + client_id + `&redirect_uri=` + encodeURIComponent(root_url) + `&response_type=token&scope=playlist-modify-private">Click here to get started.</a>`;
+	$("#loginlink").html(`<a href="https://accounts.spotify.com/authorize?client_id=` + client_id + `&redirect_uri=` + encodeURIComponent(root_url) + `&response_type=token&scope=playlist-modify-private">Click here to get started.</a>`);
 }
 
-// updates labels to reflect value of their slider; called from index
+// updates slider labels to reflect value of their slider
 function outputUpdate(id, val) {
 	document.querySelector('#' + id).value = val;
 }
 
 // get options for seed artists based on a typed name:
-function artistSearch() {
+var artistSearch = function() {
+	// kick off the loading spinner:
 	document.getElementById("artistspinner").style.display = "block";
+
+	// send request
 	$.get("https://api.spotify.com/v1/search?q=" + $("#artistsearch").val() + "&type=artist")
 	.done(function( data ) {
 		results = "";
 		for(var i=0, band; band=data.artists.items[i]; i++){
-			results += `<label class="labelbutton label label-success" onclick="addArtist('` + band.name + `', '` + band.id + `')"><span class="glyphicon glyphicon-plus"></span></label>` + band.name + `<br>`;
+			results += `<label class="labelbutton label label-success" onclick="super_tuner.addArtist('` + band.name + `', '` + band.id + `')"><span class="glyphicon glyphicon-plus"></span></label>` + band.name + `<br>`;
 		}
 		if(data.length == 0) results = "Sorry, no artists found.";
 		$("#artistoptions").html(results);
@@ -64,10 +88,13 @@ function artistSearch() {
 		console.log("Error in artist search:");
 		console.log(err);
 	});
+
+	// we're done loading:
 	document.getElementById("artistspinner").style.display = "none";
 }
 
-// check if we have enough data for a recommendations request
+// check if we have enough data for a recommendations request.
+// controls the GET RECS button and the hints for what data is required.
 function assessRecsButton() {
 	document.getElementById("seed_required").hidden = (seedartists.length > 0);
 	document.getElementById("login_required").hidden = (USERTOKEN != "");
@@ -78,12 +105,14 @@ function assessRecsButton() {
 function updateSeedArtists() {
 	results = "";
 	for(var i=0, band; band=seedartists[i]; i++){
-		results += `<label class="labelbutton label label-danger" onclick="removeArtist('` + band.id + `')\"><span class="glyphicon glyphicon-minus"></span></label>` + band.name + `<br>`;
+		results += `<label class="labelbutton label label-danger" onclick="super_tuner.removeArtist('` + band.id + `')\"><span class="glyphicon glyphicon-minus"></span></label>` + band.name + `<br>`;
 	}
 	$("#seedartistsdisplay").html(results);
-
+	// check to see if the modified seed artist list will provide the
+	//  required data:
 	assessRecsButton();
 }
+
 // add an artist to the list of seeds
 function addArtist(name, id) {
 	seedartists.push({"name": name, "id": id});
@@ -101,14 +130,19 @@ function removeArtist(id) {
 	updateSeedArtists();
 }
 
-// send the seed artist, get the recs:
-function getRecs() {
+// send recommendations request:
+var getRecs = function() {
+	// start loading spinner
 	document.getElementById("resultspinner").style.display = "block";
+
+	// build query string of artists
 	artistIDs = "";
 	for(var i=0, band; band=seedartists[i]; i++){
 		artistIDs += band.id;
 		if(i+1 != seedartists.length) artistIDs += ",";
 	}
+
+	// build and send request:
 	params = getKnobValues();
 	params.seed_artists = artistIDs;
 	$.ajax({
@@ -131,26 +165,26 @@ function getKnobValues() {
 			values["target_" + knob] = document.querySelector('#' + knob).value;
 		}
 	}
-	console.log(values);
 	return values;
 }
 
-// used for storing the IDs of recommended tracks
-var TRACK_IDS = [];
 // display recommendations in list
 function printRecs(data) {
-	results = `<ul>`
+	results = ``
 	for(var i=0, rec; rec=data.tracks[i]; i++){
+		// print each track with a "play preview" button
 		results += `<label class="labelbutton label label-`
 		if(rec.preview_url) {
-			results += `success" onclick="playPreview('` + rec.preview_url + `')"`
+			results += `success" onclick="super_tuner.playPreview('` + rec.preview_url + `')"`
 		} else {
+			// if the preview clip isn't available, don't make the button green
 			results += `default" style="cursor:auto"`
 		}
 		results += `><span class="glyphicon glyphicon-play"></span></label>` + rec.artists[0].name + `, "` + rec.name + `"<br>`;
 		TRACK_IDS.push(rec.id);
 	}
-	if(data.tracks.length == 0) results="Sorry, no tracks found.";
+	if(data.tracks.length == 0) results = "Sorry, no tracks found.";
+
 	$("#tracks").html(results);
 	document.getElementById("resultspinner").style.display = "none";
 }
@@ -161,6 +195,7 @@ function addTracksToList(playlist_id) {
 	// build the JSON body full of Spotify track URIs
 	for(var i=0; i < TRACK_IDS.length; i++) {
 		toSend += `"spotify:track:` + TRACK_IDS[i] + `"`;
+		// add a comma unless it's the last one
 		if(i != TRACK_IDS.length - 1) toSend += ",";
 	}
 	toSend += `]}`;
@@ -190,7 +225,7 @@ function addTracksToList(playlist_id) {
 	});
 }
 
-// create playlist, add tracks
+// create playlist
 function exportPlaylist() {
 	playlist_name = "Creative name to come";
 
@@ -201,10 +236,11 @@ function exportPlaylist() {
 			request.setRequestHeader("Authorization", "Bearer " + USERTOKEN);
 			request.setRequestHeader("Content-Type", "application/json");
 		},
-		data: `{"name": "` + playlist_name + `", "public": false, "description": \"Created by Super Tuner.\"}` // NOTE: This has to be a string, not a JS object.
+		// NOTE: `data` has to be a string, not a JS object.
+		data: `{"name": "` + playlist_name + `", "public": false, "description": \"Created by Super Tuner.\"}`
 		// TODO: block injection point here in playlist_name
 	})
-	.done(function( data ) {
+	.done(function(data) {
 		console.log("Playlist created");
 		addTracksToList(data.id);
 	})
@@ -230,7 +266,7 @@ function splitHashValues(hashfrag) {
 function setUser(user) {
 	// User name:
 	USERID = user.id;
-	document.getElementById("loginlink").innerHTML = `<strong>Welcome, ` + user.id + `!</strong> | <a href="` + root_url + `">(Log out)</a>`;
+	$("#loginlink").html(`<strong>Welcome, ` + user.id + `!</strong> | <a href="` + root_url + `">(Log out)</a>`);
 
 	// Profile pic:
 	if(user.images.length > 0) {
@@ -239,7 +275,7 @@ function setUser(user) {
 		profpic.style.display = "inline";
 	}
 }
-// on pageload, look to see if there is a user token in the URL.
+// look to see if there is a user token in the URL.
 function checkForUser() {
 	if(!window.location.hash) return;
 	fragment = _.trimStart(window.location.hash, '#');
@@ -267,17 +303,28 @@ function getUserData() {
 	});
 }
 
+// plays an MP3 file from the url passed to it. for previews.
 function playPreview(url) {
-	console.log("WE GOT ONE!");
-	console.log(url);
 	var player = document.getElementById("current_preview");
-	console.log(player);
 	player.src = url;
   player.play();
 }
+
 // add sliders for each metric
 createKnobs();
 // fill in the app-specific data
 setLoginUrl();
-// when the page loads this script, check for a user and process it
+// check for a user and process it
 checkForUser();
+
+// public functions used from index.html
+return {
+	artistSearch: artistSearch,
+	getRecs: getRecs,
+	addArtist: addArtist,
+	removeArtist: removeArtist,
+	playPreview: playPreview,
+	outputUpdate: outputUpdate,
+}
+
+})();
