@@ -27,7 +27,7 @@ function createKnobs() {
 			start_val = 50;
 		}
 
-		toWrite += `<tr><td><input type="checkbox" id="` + knob + `_toggle"><label for="` + knob + `">` + knob + `</label><td>
+		toWrite += `<tr><td><span class="check"><input type="checkbox" id="` + knob + `_toggle"></span><label for="` + knob + `">` + knob + `</label><td>
 		<input type="range" min="0" max="` + max + `" value="` + start_val + `" step="` + step + `" id="` + knob + `" oninput="outputUpdate('` + knob + `_value', value)">
 		<td><output for="` + knob + `" id="` + knob + `_value">` + start_val + `</output>`;
 	}

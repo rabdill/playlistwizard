@@ -8,6 +8,10 @@
 	padding-left: 20px;
 	margin-right: 20px;
 }
+
+#artistoptions {
+	margin-top: 20px;
+}
 h1, h2 {
   font-family: 'Roboto Condensed', sans-serif;
 }
@@ -20,6 +24,67 @@ h1 {
 	margin-right: 5px;
 	cursor: pointer;
 }
+
+/* Styling the bootstrap btn-primary button class
+	to use spotify green instead */
+.btn-spotify {
+  color: #fff;
+  background-color: #1DB954; /* spotify green */
+  border-color: #1AA64B; /* this background -6 brightness */
+}
+.btn-spotify:focus,
+.btn-spotify.focus {
+  color: #fff;
+  background-color: #179142;  /* standard background -16 brightness */
+  border-color: #0B421E; /* this background -31 brightness */
+}
+.btn-spotify:hover {
+  color: #fff;
+  background-color: #179142;
+  border-color: #137535; /* this background -11 brightness */
+}
+.btn-spotify:active,
+.btn-spotify.active,
+.open > .dropdown-toggle.btn-spotify {
+  color: #fff;
+  background-color: #179142;
+  border-color: #137535;
+}
+.btn-spotify:active:hover,
+.btn-spotify.active:hover,
+.open > .dropdown-toggle.btn-spotify:hover,
+.btn-spotify:active:focus,
+.btn-spotify.active:focus,
+.open > .dropdown-toggle.btn-spotify:focus,
+.btn-spotify:active.focus,
+.btn-spotify.active.focus,
+.open > .dropdown-toggle.btn-spotify.focus {
+  color: #fff;
+  background-color: #137535;
+  border-color: #0B421E;
+}
+.btn-spotify:active,
+.btn-spotify.active,
+.open > .dropdown-toggle.btn-spotify {
+  background-image: none;
+}
+.btn-spotify.disabled:hover,
+.btn-spotify[disabled]:hover,
+fieldset[disabled] .btn-spotify:hover,
+.btn-spotify.disabled:focus,
+.btn-spotify[disabled]:focus,
+fieldset[disabled] .btn-spotify:focus,
+.btn-spotify.disabled.focus,
+.btn-spotify[disabled].focus,
+fieldset[disabled] .btn-spotify.focus {
+  background-color: #1DB954;
+  border-color: #1AA64B;
+}
+.btn-spotify .badge {
+  color: #1DB954;
+  background-color: #fff;
+}
+
 /* Only show the Github ribbon on larger screens */
 @media (max-width: 768px) {
 	#forkme {
@@ -105,7 +170,9 @@ MIT license
 	}
 }
 
-
+.check {
+	padding: 10px;
+}
 
 /* making the range input knobs look nice.
 supplied from here:
