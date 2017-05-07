@@ -8,8 +8,10 @@
 	padding-left: 20px;
 	margin-right: 20px;
 }
+h1, h2 {
+  font-family: 'Roboto Condensed', sans-serif;
+}
 h1 {
-	font-family: 'Roboto Condensed', sans-serif;
 	color: #FFFFFF;
 }
 
@@ -18,6 +20,11 @@ h1 {
 	#forkme {
 		display: none;
 	}
+}
+
+#profpic {
+  height: 3em;
+  margin-left: 2em;
 }
 /* This whole is is just so the header will be lined up with
 		everything else in the container, but the header background will

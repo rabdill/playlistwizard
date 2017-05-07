@@ -169,9 +169,14 @@ function addTracksToList(playlist_id) {
 		},
 		data: toSend
 	})
-	.done(function( data ) {
+	.done(function(data) {
 		console.log("Tracks successfully added.");
 		console.log(data);
+		var exportbutton = document.getElementById("exportbutton");
+		exportbutton.innerHTML = "Exported!";
+		exportbutton.className = "btn btn-success";
+		exportbutton.disabled = true;
+
 	})
 	.fail(function(err) {
 		console.log("Error adding tracks to playlist:");
@@ -181,7 +186,7 @@ function addTracksToList(playlist_id) {
 
 // create playlist, add tracks
 function exportPlaylist() {
-	playlist_name = document.getElementById("playlistname").value;
+	playlist_name = "Creative name to come";
 
 	$.ajax({
 		url: "https://api.spotify.com/v1/users/" + USERID + "/playlists",
@@ -194,8 +199,7 @@ function exportPlaylist() {
 		// TODO: block injection point here in playlist_name
 	})
 	.done(function( data ) {
-		console.log("Playlist created:");
-		console.log(data.id);
+		console.log("Playlist created");
 		addTracksToList(data.id);
 	})
 	.fail(function(err) {
@@ -217,14 +221,18 @@ function splitHashValues(hashfrag) {
 }
 
 // if a user is logged in, let them do all the nice logged-in stuff
-function setUser(username) {
-	console.log("Logged in.")
-	USERID = username;
-	document.getElementById("loginlink").innerHTML = "<strong>Welcome, " + username + "!</strong>";
+function setUser(user) {
+	console.log(user);
+	// User name:
+	USERID = user.id;
+	document.getElementById("loginlink").innerHTML = "<strong>Welcome, " + user.id + "!</strong>";
 
-	var exportbutton = document.getElementById("exportbutton");
-	exportbutton.disabled = false;
-	exportbutton.innerHTML = "Export!";
+	// Profile pic:
+	if(user.images.length > 0) {
+		var profpic = document.getElementById("profpic");
+		profpic.src = user.images[0].url;
+		profpic.style.display = "inline";
+	}
 }
 // on pageload, look to see if there is a user token in the URL.
 function checkForUser() {
@@ -246,7 +254,7 @@ function getUserData() {
 		}
 	})
 	.done(function( data ) {
-		setUser(data.id);
+		setUser(data);
 	})
 	.fail(function(err) {
 		console.log("Error fetching user data:");
