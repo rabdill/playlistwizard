@@ -325,6 +325,7 @@ return {
 	removeArtist: removeArtist,
 	playPreview: playPreview,
 	outputUpdate: outputUpdate,
+	exportPlaylist: exportPlaylist,
 }
 
 })();
